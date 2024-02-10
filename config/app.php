@@ -59,6 +59,7 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'Token'=>\Dirape\Token\Facades\Facade::class,
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
