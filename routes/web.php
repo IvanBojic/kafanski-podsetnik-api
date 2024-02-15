@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ScreensController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Screens
+Route::prefix('screens')->group(function () {
+    Route::get('/list', [ScreensController::class, 'list']);
 });

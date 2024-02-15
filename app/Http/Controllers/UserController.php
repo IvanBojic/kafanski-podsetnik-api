@@ -15,7 +15,6 @@ class UserController extends Controller
     public function loginUser(Request $request) {
         // Request params.
 
-        dd('ccc');
         $return = [
             'code' => '',
             'message' => '',
