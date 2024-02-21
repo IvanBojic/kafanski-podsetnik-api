@@ -2,30 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Screens;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class ScreensController extends Controller
+class CategoriesController extends Controller
 {
 
     public function list(Request $request)
     {
         $return = [
             'code' => 200,
-            'message' => 'Nema unetih screen-ova.',
+            'message' => 'Nema unetih kategorija.',
             'payload' => (object) array(),
             'success' => true,
         ];
 
         $fields = [
-            'id',
-            'title'
+            'categories.id',
+            'categories.id_screen',
+            'categories.title as categories_title',
+            'screens.title as screen_title'
         ];
 
-        $rows = Screens::select($fields)
+        $id_screen = $request->id_screen;
+
+        $rows = Categories::select($fields)
             ->where("status", 'on')
             ->where("active", 1);
+
+        if($id_screen) {
+            $rows = Categories::select($fields)
+                ->rightJoin('screens', 'categories.id_screen', '=', 'screens.id')
+                ->where('categories.id_screen', $id_screen)
+                ->where('categories.status', 'on')
+                ->where('categories.active', 1);
+        }
 
         $rows = $rows->get();
 
@@ -55,22 +67,23 @@ class ScreensController extends Controller
         ];
 
         $save_data = [
+            'id_screen'  =>  $request->id_screen,
             'title'  =>  $request->title,
             'status'  =>  $request->status,
         ];
-        $rows = Screens::updateOrCreate(['id'  =>  $request->id],$save_data);
+        $rows = Categories::updateOrCreate(['id'  =>  $request->id],$save_data);
 
         if($request->id){
             $return = [
                 'code' => 200,
-                'message' => 'Uspešno ste izmenili screen.',
+                'message' => 'Uspešno ste izmenili kategoriju.',
                 'payload' => $rows,
                 'success' => true,
             ];
         } else {
             $return = [
                 'code' => 200,
-                'message' => 'Uspešno ste kreirali novi screen.',
+                'message' => 'Uspešno ste kreirali novi kategoriju.',
                 'payload' => $rows,
                 'success' => true,
             ];
@@ -98,20 +111,20 @@ class ScreensController extends Controller
         $save_data = [
             'status'  =>  'off',
         ];
-        $rows = Screens::find($request->id);
+        $rows = Categories::find($request->id);
 
         if ($rows){
             $rows->updateOrFail($save_data);
             $return = [
                 'code' => 200,
-                'message' => 'Uspešno ste uklonili screen.',
+                'message' => 'Uspešno ste uklonili kategoriju.',
                 'payload' => $rows,
                 'success' => true,
             ];
         } else {
             $return = [
                 'code' => 422,
-                'message' => 'Trazeni screen ne postoji.',
+                'message' => 'Trazena kategorija ne postoji.',
                 'payload' => (object) array(),
                 'success' => false,
             ];

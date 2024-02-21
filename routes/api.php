@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ScreensController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,9 +32,16 @@ Route::middleware('jwt.verify')->group(function() {
     // Content
     Route::prefix('user/content')->group(function () {
         // Screens
-        Route::get('/screens/list', [ScreensController::class, 'list']);
-        Route::post('/screens/create', [ScreensController::class, 'insertOrUpdate']);
-        Route::delete('/screens/delete', [ScreensController::class, 'delete']);
+        Route::prefix('screens')->group(function () {
+            Route::get('/list', [ScreensController::class, 'list']);
+            Route::post('/create', [ScreensController::class, 'insertOrUpdate']);
+            Route::delete('/delete', [ScreensController::class, 'delete']);
+        });
         // Categories
+        Route::prefix('categories')->group(function () {
+            Route::get('/list', [CategoriesController::class, 'list']);
+            Route::post('/create', [CategoriesController::class, 'insertOrUpdate']);
+            Route::delete('/delete', [CategoriesController::class, 'delete']);
+        });
     });
 });

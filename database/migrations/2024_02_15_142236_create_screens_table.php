@@ -70,6 +70,10 @@ class CreateScreensTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('screens');
+
+        Schema::enableForeignKeyConstraints();
     }
 }

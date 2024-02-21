@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ScreensController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,9 @@ Route::get('/', function () {
 // Screens
 Route::prefix('screens')->group(function () {
     Route::get('/list', [ScreensController::class, 'list']);
+});
+
+// Categories
+Route::prefix('categories')->group(function () {
+    Route::get('/list', [CategoriesController::class, 'list']);
 });
